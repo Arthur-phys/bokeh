@@ -128,8 +128,18 @@ export class Plot extends LayoutDOM {
       toolbar_location:  [ p.Location, 'right'                 ],
       toolbar_sticky:    [ p.Boolean,  true                    ],
 
-      plot_width:        [ p.Number,   600                     ],
-      plot_height:       [ p.Number,   600                     ],
+      plot_width:        [ p.Number,   600, {
+        on_update(width: number, obj: Plot) {
+          if (obj.width == null || obj.properties.width.dirty!)
+            obj.width = width
+        },
+      }],
+      plot_height:       [ p.Number,   600, {
+        on_update(height: number, obj: Plot) {
+          if (obj.height == null || obj.properties.height.dirty!)
+            obj.height = height
+        },
+      }],
 
       frame_width:       [ p.Number,   null                    ],
       frame_height:      [ p.Number,   null                    ],
@@ -183,25 +193,6 @@ export class Plot extends LayoutDOM {
       border_fill_color: "#ffffff",
       background_fill_color: "#ffffff",
     })
-  }
-
-  // TODO: change this when we drop ES5 compatibility (https://github.com/microsoft/TypeScript/issues/338)
-  get width(): number | null {
-    // const width = super.width
-    const width = this.properties.width.get_value()
-    return width != null ? width : this.plot_width
-  }
-  set width(width: number | null) {
-    this.setv({width, plot_width: width})
-  }
-
-  get height(): number | null {
-    // const height = super.height
-    const height = this.properties.height.get_value()
-    return height != null ? height : this.plot_height
-  }
-  set height(height: number | null) {
-    this.setv({height, plot_height: height})
   }
 
   protected _doc_attached(): void {
